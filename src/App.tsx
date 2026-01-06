@@ -256,7 +256,7 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     className="flex flex-col items-center gap-8 w-full max-w-5xl"
                   >
-                    <div className={`flex flex-col md:flex-row items-start gap-8 w-full ${!showPlayerSetup ? 'justify-center' : ''}`}>
+                    <div className={`flex flex-col md:flex-row items-center md:items-start gap-8 w-full ${!showPlayerSetup ? 'justify-center' : ''}`}>
                       {/* Spieler Setup */}
                       {showPlayerSetup && (
                         <Card className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl w-full md:w-96">
@@ -385,7 +385,7 @@ function App() {
                       )}
 
                       {/* Würfel und Schwierigkeitsauswahl */}
-                      <div className="flex flex-col md:flex-row items-center gap-8 flex-1 justify-center">
+                      <div className="flex flex-col items-center gap-4 sm:gap-8 flex-1 justify-center w-full md:w-auto">
                         <div 
                           className="cursor-pointer transition-transform hover:scale-105"
                           onClick={showPlayerSetup ? undefined : handleDiceClick}
@@ -394,7 +394,7 @@ function App() {
                           <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
                         </div>
 
-                        <Card className="p-4 sm:p-8 text-center rounded-2xl sm:rounded-3xl">
+                        <Card className="p-4 sm:p-8 text-center rounded-2xl sm:rounded-3xl w-full max-w-sm">
                           <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6">Wähle die Schwierigkeit</h2>
                           <div className="flex gap-2 sm:gap-4 justify-center">
                             <Button
