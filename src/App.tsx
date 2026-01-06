@@ -130,14 +130,6 @@ function App() {
     setTempPlayerName('')
   }
 
-  const handleStartGame = (gamePlayers: Player[], solo: boolean) => {
-    setPlayers(gamePlayers)
-    setSoloMode(solo)
-    setCurrentPlayerIndex(0)
-    setShowPlayerSetup(false)
-    setGameState('selectDifficulty')
-  }
-
   const addPlayer = () => {
     if (tempPlayerName.trim()) {
       const newPlayer: Player = {
