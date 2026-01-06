@@ -6,10 +6,6 @@ import { ErrorFallback } from './ErrorFallback.tsx'
 
 import "./index.css"
 
-if (!import.meta.env.DEV) {
-  void import("@github/spark/spark")
-}
-
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
