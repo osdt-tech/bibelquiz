@@ -3,9 +3,12 @@ import { useKV } from '@/hooks/use-kv'
 import { CATEGORIES, QUESTIONS, type CategoryColor, type Question, type Difficulty } from '@/lib/questions'
 import { ColorDice } from '@/components/ColorDice'
 import { QuestionReview } from '@/components/QuestionReview'
+import { Rules } from '@/components/Rules'
+import { type Player } from '@/components/PlayerSetup'
+import { Scoreboard } from '@/components/Scoreboard'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, ArrowsClockwise, Trophy, MagnifyingGlass } from '@phosphor-icons/react'
+import { ArrowRight, ArrowsClockwise, Trophy, MagnifyingGlass, BookOpen, UserPlus, Trash, Users, Cube } from '@phosphor-icons/react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type GameState = 'selectDifficulty' | 'dice' | 'showCategory' | 'showQuestion'
@@ -22,6 +25,13 @@ function App() {
   const [showAnswer, setShowAnswer] = useState(false)
   const [usedQuestions, setUsedQuestions] = useKV<string[]>('bible-quiz-used-questions', [])
   const [showReviewMode, setShowReviewMode] = useState(false)
+  const [showRules, setShowRules] = useState(false)
+  const [showPlayerSetup, setShowPlayerSetup] = useState(true)
+  const [players, setPlayers] = useState<Player[]>([])
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
+  const [soloMode, setSoloMode] = useState(true)
+  const [tempPlayerName, setTempPlayerName] = useState('')
+  const [isMultiplayer, setIsMultiplayer] = useState(false)
 
   const allQuestionsForDifficulty = useMemo(() => 
     selectedDifficulty 
@@ -80,14 +90,27 @@ function App() {
     }
   }, [gameState, selectedCategory, questionsByCategory])
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = (answeredCorrectly: boolean = false) => {
     if (currentQuestion) {
       setUsedQuestions((current) => [...(current || []), currentQuestion.id])
+      
+      // Punkte nur im Mehrspieler-Modus vergeben
+      if (!soloMode && players.length > 0 && answeredCorrectly) {
+        const updatedPlayers = [...players]
+        updatedPlayers[currentPlayerIndex].score += currentQuestion.difficulty
+        setPlayers(updatedPlayers)
+      }
     }
+    
     setCurrentQuestion(null)
     setShowAnswer(false)
     setSelectedCategory(null)
     setGameState('dice')
+    
+    // Nächster Spieler ist dran (nur im Mehrspieler-Modus)
+    if (!soloMode && players.length > 0) {
+      setCurrentPlayerIndex((current) => (current + 1) % players.length)
+    }
   }
 
 
@@ -99,9 +122,59 @@ function App() {
     setSelectedCategory(null)
     setSelectedDifficulty(null)
     setGameState('selectDifficulty')
+    setShowPlayerSetup(true)
+    setPlayers([])
+    setCurrentPlayerIndex(0)
+    setSoloMode(true)
+    setIsMultiplayer(false)
+    setTempPlayerName('')
+  }
+
+  const handleStartGame = (gamePlayers: Player[], solo: boolean) => {
+    setPlayers(gamePlayers)
+    setSoloMode(solo)
+    setCurrentPlayerIndex(0)
+    setShowPlayerSetup(false)
+    setGameState('selectDifficulty')
+  }
+
+  const addPlayer = () => {
+    if (tempPlayerName.trim()) {
+      const newPlayer: Player = {
+        id: Math.random().toString(36).substr(2, 9),
+        name: tempPlayerName.trim(),
+        score: 0
+      }
+      setPlayers([...players, newPlayer])
+      setTempPlayerName('')
+    }
+  }
+
+  const removePlayer = (id: string) => {
+    setPlayers(players.filter(p => p.id !== id))
+  }
+
+  const startWithPlayers = () => {
+    if (players.length >= 2) {
+      const shuffledPlayers = [...players].sort(() => Math.random() - 0.5)
+      setPlayers(shuffledPlayers)
+      setSoloMode(false)
+      setShowPlayerSetup(false)
+    }
+  }
+
+  const startSolo = () => {
+    setPlayers([])
+    setSoloMode(true)
+    setShowPlayerSetup(false)
   }
 
   const allQuestionsUsed = availableQuestions.length === 0
+
+  // Show rules if enabled
+  if (showRules) {
+    return <Rules onClose={() => setShowRules(false)} />
+  }
 
   // Show review mode if enabled
   if (showReviewMode) {
@@ -116,7 +189,7 @@ function App() {
             <h1 className="text-4xl md:text-5xl font-bold text-foreground text-center">
               Bibelquiz
             </h1>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap justify-center">
               <Button 
                 variant="outline" 
                 onClick={handleReset}
@@ -133,11 +206,27 @@ function App() {
                 <MagnifyingGlass className="w-5 h-5" />
                 Prüfmodus
               </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowRules(true)}
+                className="gap-2"
+              >
+                <BookOpen className="w-5 h-5" />
+                Spielregeln
+              </Button>
             </div>
           </div>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span>{answeredCount} Fragen beantwortet</span>
+            {!soloMode && players.length > 0 && (
+              <>
+                <span>•</span>
+                <span className="font-semibold text-primary">
+                  {players[currentPlayerIndex]?.name} ist am Zug
+                </span>
+              </>
+            )}
           </div>
 
           {allQuestionsUsed ? (
@@ -167,53 +256,187 @@ function App() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="flex flex-col md:flex-row items-center gap-12 w-full justify-center"
+                    className="flex flex-col items-center gap-8 w-full max-w-5xl"
                   >
-                    <div 
-                      className="cursor-pointer transition-transform hover:scale-105"
-                      onClick={handleDiceClick}
-                    >
-                      <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
-                    </div>
+                    <div className="flex flex-col md:flex-row items-start gap-8 w-full">
+                      {/* Würfel und Schwierigkeitsauswahl */}
+                      <div className="flex flex-col md:flex-row items-center gap-8 flex-1 justify-center">
+                        <div 
+                          className="cursor-pointer transition-transform hover:scale-105"
+                          onClick={showPlayerSetup ? undefined : handleDiceClick}
+                          style={{ opacity: showPlayerSetup ? 0.5 : 1 }}
+                        >
+                          <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
+                        </div>
 
-                    <Card className="p-8 text-center rounded-3xl">
-                      <h2 className="text-2xl font-bold mb-6">Wähle die Schwierigkeit</h2>
-                      <div className="flex gap-4 justify-center">
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="text-4xl font-bold w-20 h-20"
-                          onClick={() => {
-                            setSelectedDifficulty(1)
-                            setGameState('dice')
-                          }}
-                        >
-                          1
-                        </Button>
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="text-4xl font-bold w-20 h-20"
-                          onClick={() => {
-                            setSelectedDifficulty(2)
-                            setGameState('dice')
-                          }}
-                        >
-                          2
-                        </Button>
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="text-4xl font-bold w-20 h-20"
-                          onClick={() => {
-                            setSelectedDifficulty(3)
-                            setGameState('dice')
-                          }}
-                        >
-                          3
-                        </Button>
+                        <Card className="p-8 text-center rounded-3xl">
+                          <h2 className="text-2xl font-bold mb-6">Wähle die Schwierigkeit</h2>
+                          <div className="flex gap-4 justify-center">
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="text-4xl font-bold w-20 h-20"
+                              disabled={showPlayerSetup}
+                              onClick={() => {
+                                setSelectedDifficulty(1)
+                                setGameState('dice')
+                              }}
+                            >
+                              1
+                            </Button>
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="text-4xl font-bold w-20 h-20"
+                              disabled={showPlayerSetup}
+                              onClick={() => {
+                                setSelectedDifficulty(2)
+                                setGameState('dice')
+                              }}
+                            >
+                              2
+                            </Button>
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="text-4xl font-bold w-20 h-20"
+                              disabled={showPlayerSetup}
+                              onClick={() => {
+                                setSelectedDifficulty(3)
+                                setGameState('dice')
+                              }}
+                            >
+                              3
+                            </Button>
+                          </div>
+                        </Card>
                       </div>
-                    </Card>
+
+                      {/* Spieler Setup */}
+                      <Card className="p-6 rounded-3xl w-full md:w-96">
+                        <div className="space-y-6">
+                          {/* Toggle zwischen Solo und Mehrspieler */}
+                          <div className="flex gap-2">
+                            <Button
+                              variant={!isMultiplayer ? "default" : "outline"}
+                              className="flex-1"
+                              onClick={() => {
+                                setIsMultiplayer(false)
+                                if (!showPlayerSetup) {
+                                  startSolo()
+                                }
+                              }}
+                            >
+                              <Users className="w-4 h-4 mr-2" />
+                              Solo
+                            </Button>
+                            <Button
+                              variant={isMultiplayer ? "default" : "outline"}
+                              className="flex-1"
+                              onClick={() => setIsMultiplayer(true)}
+                            >
+                              <Cube className="w-4 h-4 mr-2" />
+                              Mehrspieler
+                            </Button>
+                          </div>
+
+                          {!isMultiplayer ? (
+                            /* Solo Modus */
+                            <div className="text-center py-4">
+                              <p className="text-muted-foreground mb-4">
+                                Ohne Punktezählung, nur zum Üben
+                              </p>
+                              {showPlayerSetup && (
+                                <Button onClick={startSolo} size="lg" className="w-full">
+                                  Solo starten
+                                </Button>
+                              )}
+                            </div>
+                          ) : (
+                            /* Mehrspieler Modus */
+                            <div className="space-y-4">
+                              <p className="text-sm text-muted-foreground">
+                                Mindestens 2 Spieler für Mehrspieler-Modus
+                              </p>
+
+                              {/* Spieler hinzufügen */}
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  value={tempPlayerName}
+                                  onChange={(e) => setTempPlayerName(e.target.value)}
+                                  onKeyPress={(e) => e.key === 'Enter' && addPlayer()}
+                                  placeholder="Spielername..."
+                                  className="flex-1 px-3 py-2 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                                />
+                                <Button
+                                  onClick={addPlayer}
+                                  disabled={!tempPlayerName.trim()}
+                                  size="sm"
+                                  className="gap-1"
+                                >
+                                  <UserPlus className="w-4 h-4" />
+                                </Button>
+                              </div>
+
+                              {/* Spielerliste */}
+                              {players.length > 0 && (
+                                <div className="space-y-2">
+                                  <h4 className="text-sm font-medium text-muted-foreground">
+                                    Spieler ({players.length})
+                                  </h4>
+                                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                                    {players.map((player, index) => (
+                                      <div
+                                        key={player.id}
+                                        className="flex items-center justify-between p-2 rounded-lg bg-muted/50"
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold">
+                                            {index + 1}
+                                          </div>
+                                          <span className="text-sm font-medium">{player.name}</span>
+                                        </div>
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          onClick={() => removePlayer(player.id)}
+                                          className="h-6 w-6"
+                                        >
+                                          <Trash className="w-3 h-3" />
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Start Button */}
+                              {showPlayerSetup && (
+                                <Button
+                                  onClick={startWithPlayers}
+                                  disabled={players.length < 2}
+                                  size="lg"
+                                  className="w-full gap-2"
+                                >
+                                  <Cube className="w-5 h-5" />
+                                  {players.length < 2 
+                                    ? 'Mindestens 2 Spieler benötigt'
+                                    : 'Mehrspieler starten'
+                                  }
+                                </Button>
+                              )}
+
+                              {players.length === 1 && (
+                                <p className="text-xs text-muted-foreground text-center">
+                                  Füge mindestens einen weiteren Spieler hinzu
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    </div>
                   </motion.div>
                 )}
 
@@ -231,6 +454,13 @@ function App() {
                     >
                       <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
                     </div>
+
+                    {/* Scoreboard für Mehrspieler unter dem Würfel */}
+                    {!soloMode && players.length > 0 && (
+                      <div className="w-full max-w-2xl">
+                        <Scoreboard players={players} currentPlayerIndex={currentPlayerIndex} />
+                      </div>
+                    )}
 
                     <div className="flex flex-col items-center gap-4">
                       <p className="text-muted-foreground">Klicke auf den Würfel</p>
@@ -337,16 +567,40 @@ function App() {
                             <p className="text-xl leading-relaxed">{currentQuestion.answer}</p>
                           </div>
 
-                          <div className="flex gap-4 pt-6">
-                            <Button 
-                              onClick={handleNextQuestion}
-                              className="w-full gap-2 bg-white/90 hover:bg-white text-foreground font-bold text-lg py-6"
-                              size="lg"
-                            >
-                              Nächste Frage
-                              <ArrowRight className="w-5 h-5" />
-                            </Button>
-                          </div>
+                          {!soloMode && players.length > 0 && (
+                            <div className="bg-white/20 p-4 rounded-xl">
+                              <p className="text-lg font-semibold mb-2">Hast du richtig geantwortet?</p>
+                              <div className="flex gap-3">
+                                <Button 
+                                  onClick={() => handleNextQuestion(true)}
+                                  className="flex-1 gap-2 bg-green-500 hover:bg-green-600 text-white font-bold text-lg py-4"
+                                  size="lg"
+                                >
+                                  ✓ Ja (+{currentQuestion.difficulty} Punkt{currentQuestion.difficulty > 1 ? 'e' : ''})
+                                </Button>
+                                <Button 
+                                  onClick={() => handleNextQuestion(false)}
+                                  className="flex-1 gap-2 bg-red-500 hover:bg-red-600 text-white font-bold text-lg py-4"
+                                  size="lg"
+                                >
+                                  ✗ Nein
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+
+                          {soloMode && (
+                            <div className="flex gap-4">
+                              <Button 
+                                onClick={() => handleNextQuestion()}
+                                className="w-full gap-2 bg-white/90 hover:bg-white text-foreground font-bold text-lg py-6"
+                                size="lg"
+                              >
+                                Nächste Frage
+                                <ArrowRight className="w-5 h-5" />
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </motion.div>
