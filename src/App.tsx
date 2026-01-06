@@ -250,9 +250,10 @@ function App() {
                     exit={{ opacity: 0, y: -20 }}
                     className="flex flex-col items-center gap-8 w-full max-w-5xl"
                   >
-                    <div className="flex flex-col md:flex-row items-start gap-8 w-full">
+                    <div className={`flex flex-col md:flex-row items-start gap-8 w-full ${!showPlayerSetup ? 'justify-center' : ''}`}>
                       {/* Spieler Setup */}
-                      <Card className="p-6 rounded-3xl w-full md:w-96">
+                      {showPlayerSetup && (
+                        <Card className="p-6 rounded-3xl w-full md:w-96">
                         <div className="space-y-6">
                           {/* Toggle zwischen Solo und Mehrspieler */}
                           <div className="flex gap-2">
@@ -375,13 +376,14 @@ function App() {
                           )}
                         </div>
                       </Card>
+                      )}
 
                       {/* Würfel und Schwierigkeitsauswahl */}
                       <div className="flex flex-col md:flex-row items-center gap-8 flex-1 justify-center">
                         <div 
                           className="cursor-pointer transition-transform hover:scale-105"
                           onClick={showPlayerSetup ? undefined : handleDiceClick}
-                          style={{ opacity: showPlayerSetup ? 0.5 : 1 }}
+                          style={{ opacity: showPlayerSetup ? 0.5 : 1, pointerEvents: showPlayerSetup ? 'none' : 'auto' }}
                         >
                           <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
                         </div>
