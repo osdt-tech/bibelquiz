@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from 'node:url';
 export default ({ mode }: ConfigEnv) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
     return defineConfig({
-        base: '/bibelquiz/',
+        base: './',
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
