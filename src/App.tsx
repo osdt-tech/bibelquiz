@@ -251,59 +251,6 @@ function App() {
                     className="flex flex-col items-center gap-8 w-full max-w-5xl"
                   >
                     <div className="flex flex-col md:flex-row items-start gap-8 w-full">
-                      {/* Würfel und Schwierigkeitsauswahl */}
-                      <div className="flex flex-col md:flex-row items-center gap-8 flex-1 justify-center">
-                        <div 
-                          className="cursor-pointer transition-transform hover:scale-105"
-                          onClick={showPlayerSetup ? undefined : handleDiceClick}
-                          style={{ opacity: showPlayerSetup ? 0.5 : 1 }}
-                        >
-                          <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
-                        </div>
-
-                        <Card className="p-8 text-center rounded-3xl">
-                          <h2 className="text-2xl font-bold mb-6">Wähle die Schwierigkeit</h2>
-                          <div className="flex gap-4 justify-center">
-                            <Button
-                              size="lg"
-                              variant="outline"
-                              className="text-4xl font-bold w-20 h-20"
-                              disabled={showPlayerSetup}
-                              onClick={() => {
-                                setSelectedDifficulty(1)
-                                setGameState('dice')
-                              }}
-                            >
-                              1
-                            </Button>
-                            <Button
-                              size="lg"
-                              variant="outline"
-                              className="text-4xl font-bold w-20 h-20"
-                              disabled={showPlayerSetup}
-                              onClick={() => {
-                                setSelectedDifficulty(2)
-                                setGameState('dice')
-                              }}
-                            >
-                              2
-                            </Button>
-                            <Button
-                              size="lg"
-                              variant="outline"
-                              className="text-4xl font-bold w-20 h-20"
-                              disabled={showPlayerSetup}
-                              onClick={() => {
-                                setSelectedDifficulty(3)
-                                setGameState('dice')
-                              }}
-                            >
-                              3
-                            </Button>
-                          </div>
-                        </Card>
-                      </div>
-
                       {/* Spieler Setup */}
                       <Card className="p-6 rounded-3xl w-full md:w-96">
                         <div className="space-y-6">
@@ -428,6 +375,59 @@ function App() {
                           )}
                         </div>
                       </Card>
+
+                      {/* Würfel und Schwierigkeitsauswahl */}
+                      <div className="flex flex-col md:flex-row items-center gap-8 flex-1 justify-center">
+                        <div 
+                          className="cursor-pointer transition-transform hover:scale-105"
+                          onClick={showPlayerSetup ? undefined : handleDiceClick}
+                          style={{ opacity: showPlayerSetup ? 0.5 : 1 }}
+                        >
+                          <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
+                        </div>
+
+                        <Card className="p-8 text-center rounded-3xl">
+                          <h2 className="text-2xl font-bold mb-6">Wähle die Schwierigkeit</h2>
+                          <div className="flex gap-4 justify-center">
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="text-4xl font-bold w-20 h-20"
+                              disabled={showPlayerSetup}
+                              onClick={() => {
+                                setSelectedDifficulty(1)
+                                setGameState('dice')
+                              }}
+                            >
+                              1
+                            </Button>
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="text-4xl font-bold w-20 h-20"
+                              disabled={showPlayerSetup}
+                              onClick={() => {
+                                setSelectedDifficulty(2)
+                                setGameState('dice')
+                              }}
+                            >
+                              2
+                            </Button>
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="text-4xl font-bold w-20 h-20"
+                              disabled={showPlayerSetup}
+                              onClick={() => {
+                                setSelectedDifficulty(3)
+                                setGameState('dice')
+                              }}
+                            >
+                              3
+                            </Button>
+                          </div>
+                        </Card>
+                      </div>
                     </div>
                   </motion.div>
                 )}
