@@ -35,7 +35,9 @@ export function ColorDice({ isRolling, faceColors, difficulty }: ColorDiceProps)
       antialias: true, 
       alpha: true 
     })
-    renderer.setSize(300, 300)
+    // Responsive size: smaller on mobile
+    const size = window.innerWidth < 640 ? 200 : 300
+    renderer.setSize(size, size)
     renderer.setClearColor(0x000000, 0)
     containerRef.current.appendChild(renderer.domElement)
     rendererRef.current = renderer

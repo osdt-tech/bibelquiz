@@ -174,37 +174,43 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col p-4 pt-8">
+    <div className="min-h-screen bg-background flex flex-col p-2 sm:p-4 pt-4 sm:pt-8">
       <div className="w-full max-w-4xl mx-auto">
-        <div className="flex flex-col items-center space-y-8">
-          <div className="flex flex-col items-center gap-4 w-full">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground text-center">
+        <div className="flex flex-col items-center space-y-4 sm:space-y-8">
+          <div className="flex flex-col items-center gap-2 sm:gap-4 w-full">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground text-center">
               Bibelquiz
             </h1>
-            <div className="flex gap-2 flex-wrap justify-center">
+            <div className="flex gap-1 sm:gap-2 flex-wrap justify-center">
               <Button 
                 variant="outline" 
                 onClick={handleReset}
-                className="gap-2"
+                className="gap-1 sm:gap-2 text-xs sm:text-sm"
+                size="sm"
               >
-                <ArrowsClockwise className="w-5 h-5" />
-                Neues Spiel
+                <ArrowsClockwise className="w-4 h-4" />
+                <span className="hidden sm:inline">Neues Spiel</span>
+                <span className="sm:hidden">Neu</span>
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => setShowReviewMode(true)}
-                className="gap-2"
+                className="gap-1 sm:gap-2 text-xs sm:text-sm"
+                size="sm"
               >
-                <MagnifyingGlass className="w-5 h-5" />
-                Prüfmodus
+                <MagnifyingGlass className="w-4 h-4" />
+                <span className="hidden sm:inline">Prüfmodus</span>
+                <span className="sm:hidden">Prüfen</span>
               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => setShowRules(true)}
-                className="gap-2"
+                className="gap-1 sm:gap-2 text-xs sm:text-sm"
+                size="sm"
               >
-                <BookOpen className="w-5 h-5" />
-                Spielregeln
+                <BookOpen className="w-4 h-4" />
+                <span className="hidden sm:inline">Spielregeln</span>
+                <span className="sm:hidden">Regeln</span>
               </Button>
             </div>
           </div>
@@ -225,16 +231,16 @@ function App() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center space-y-6"
+              className="flex flex-col items-center space-y-4 sm:space-y-6"
             >
-              <Trophy className="w-24 h-24 text-primary" weight="fill" />
-              <Card className="p-8 text-center rounded-3xl">
-                <h2 className="text-2xl font-bold mb-4">Glückwunsch!</h2>
-                <p className="text-muted-foreground mb-6">
+              <Trophy className="w-16 h-16 sm:w-24 sm:h-24 text-primary" weight="fill" />
+              <Card className="p-4 sm:p-8 text-center rounded-2xl sm:rounded-3xl">
+                <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Glückwunsch!</h2>
+                <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
                   Du hast alle Fragen beantwortet!
                 </p>
-                <Button onClick={handleReset} className="gap-2">
-                  <ArrowsClockwise className="w-5 h-5" />
+                <Button onClick={handleReset} className="gap-1 sm:gap-2 text-sm sm:text-base">
+                  <ArrowsClockwise className="w-4 h-4 sm:w-5 sm:h-5" />
                   Neues Spiel starten
                 </Button>
               </Card>
@@ -253,7 +259,7 @@ function App() {
                     <div className={`flex flex-col md:flex-row items-start gap-8 w-full ${!showPlayerSetup ? 'justify-center' : ''}`}>
                       {/* Spieler Setup */}
                       {showPlayerSetup && (
-                        <Card className="p-6 rounded-3xl w-full md:w-96">
+                        <Card className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl w-full md:w-96">
                         <div className="space-y-6">
                           {/* Toggle zwischen Solo und Mehrspieler */}
                           <div className="flex gap-2">
@@ -388,13 +394,13 @@ function App() {
                           <ColorDice isRolling={isRolling} faceColors={DICE_COLORS} difficulty={selectedDifficulty} />
                         </div>
 
-                        <Card className="p-8 text-center rounded-3xl">
-                          <h2 className="text-2xl font-bold mb-6">Wähle die Schwierigkeit</h2>
-                          <div className="flex gap-4 justify-center">
+                        <Card className="p-4 sm:p-8 text-center rounded-2xl sm:rounded-3xl">
+                          <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6">Wähle die Schwierigkeit</h2>
+                          <div className="flex gap-2 sm:gap-4 justify-center">
                             <Button
                               size="lg"
                               variant="outline"
-                              className="text-4xl font-bold w-20 h-20"
+                              className="text-2xl sm:text-4xl font-bold w-16 h-16 sm:w-20 sm:h-20"
                               disabled={showPlayerSetup}
                               onClick={() => {
                                 setSelectedDifficulty(1)
@@ -406,7 +412,7 @@ function App() {
                             <Button
                               size="lg"
                               variant="outline"
-                              className="text-4xl font-bold w-20 h-20"
+                              className="text-2xl sm:text-4xl font-bold w-16 h-16 sm:w-20 sm:h-20"
                               disabled={showPlayerSetup}
                               onClick={() => {
                                 setSelectedDifficulty(2)
@@ -418,7 +424,7 @@ function App() {
                             <Button
                               size="lg"
                               variant="outline"
-                              className="text-4xl font-bold w-20 h-20"
+                              className="text-2xl sm:text-4xl font-bold w-16 h-16 sm:w-20 sm:h-20"
                               disabled={showPlayerSetup}
                               onClick={() => {
                                 setSelectedDifficulty(3)
@@ -468,10 +474,10 @@ function App() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex flex-col items-center space-y-8"
+                    className="flex flex-col items-center space-y-4 sm:space-y-8"
                   >
                     <div 
-                      className="w-48 h-48 rounded-full flex items-center justify-center text-6xl shadow-2xl"
+                      className="w-32 h-32 sm:w-48 sm:h-48 rounded-full flex items-center justify-center text-4xl sm:text-6xl shadow-2xl"
                       style={{ 
                         backgroundColor: category.colorValue,
                         color: category.textColor
@@ -479,8 +485,8 @@ function App() {
                     >
                       {category.icon}
                     </div>
-                    <Card className="p-8 text-center rounded-3xl">
-                      <h2 className="text-3xl font-bold">{category.name}</h2>
+                    <Card className="p-4 sm:p-8 text-center rounded-2xl sm:rounded-3xl">
+                      <h2 className="text-xl sm:text-3xl font-bold">{category.name}</h2>
                     </Card>
                   </motion.div>
                 )}
@@ -511,23 +517,23 @@ function App() {
                           boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
                         }}
                       >
-                        <div className="flex items-start justify-between mb-8">
-                          <div className="flex items-center gap-3">
-                            <div className="text-3xl">{category.icon}</div>
-                            <h3 className="font-bold text-xl">{category.name}</h3>
+                        <div className="flex items-start justify-between mb-4 sm:mb-8">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="text-xl sm:text-3xl">{category.icon}</div>
+                            <h3 className="font-bold text-base sm:text-xl">{category.name}</h3>
                           </div>
-                          <div className="text-6xl font-bold">{currentQuestion.difficulty}</div>
+                          <div className="text-3xl sm:text-6xl font-bold">{currentQuestion.difficulty}</div>
                         </div>
 
-                        <div className="space-y-6">
-                          <h2 className="text-2xl font-semibold leading-relaxed">
+                        <div className="space-y-4 sm:space-y-6">
+                          <h2 className="text-lg sm:text-2xl font-semibold leading-relaxed">
                             {currentQuestion.question}
                           </h2>
 
-                          <div className="flex gap-4 pt-6">
+                          <div className="flex gap-2 sm:gap-4 pt-4 sm:pt-6">
                             <Button 
                               onClick={() => setShowAnswer(true)}
-                              className="flex-1 bg-white/90 hover:bg-white text-foreground font-bold text-lg py-6"
+                              className="flex-1 bg-white/90 hover:bg-white text-foreground font-bold text-sm sm:text-lg py-4 sm:py-6"
                               size="lg"
                             >
                               Antwort anzeigen
@@ -537,7 +543,7 @@ function App() {
                       </div>
 
                       <div 
-                        className="absolute w-full top-0 left-0 p-8 rounded-lg"
+                        className="absolute w-full top-0 left-0 p-4 sm:p-8 rounded-lg"
                         style={{ 
                           backfaceVisibility: 'hidden',
                           transform: 'rotateY(180deg)',
@@ -547,34 +553,34 @@ function App() {
                           boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
                         }}
                       >
-                        <div className="flex items-start justify-between mb-8">
-                          <div className="flex items-center gap-3">
-                            <div className="text-3xl">{category.icon}</div>
-                            <h3 className="font-bold text-xl">{category.name}</h3>
+                        <div className="flex items-start justify-between mb-4 sm:mb-8">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="text-xl sm:text-3xl">{category.icon}</div>
+                            <h3 className="font-bold text-base sm:text-xl">{category.name}</h3>
                           </div>
-                          <div className="text-6xl font-bold">{currentQuestion.difficulty}</div>
+                          <div className="text-3xl sm:text-6xl font-bold">{currentQuestion.difficulty}</div>
                         </div>
 
-                        <div className="space-y-6">
+                        <div className="space-y-4 sm:space-y-6">
                           <div>
-                            <h3 className="font-bold text-2xl mb-4">Antwort:</h3>
-                            <p className="text-xl leading-relaxed">{currentQuestion.answer}</p>
+                            <h3 className="font-bold text-lg sm:text-2xl mb-2 sm:mb-4">Antwort:</h3>
+                            <p className="text-base sm:text-xl leading-relaxed">{currentQuestion.answer}</p>
                           </div>
 
                           {!soloMode && players.length > 0 && (
-                            <div className="bg-white/20 p-4 rounded-xl">
-                              <p className="text-lg font-semibold mb-2">Hast du richtig geantwortet?</p>
-                              <div className="flex gap-3">
+                            <div className="bg-white/20 p-3 sm:p-4 rounded-xl">
+                              <p className="text-sm sm:text-lg font-semibold mb-2">Hast du richtig geantwortet?</p>
+                              <div className="flex gap-2 sm:gap-3">
                                 <Button 
                                   onClick={() => handleNextQuestion(true)}
-                                  className="flex-1 gap-2 bg-green-500 hover:bg-green-600 text-white font-bold text-lg py-4"
+                                  className="flex-1 gap-1 sm:gap-2 bg-green-500 hover:bg-green-600 text-white font-bold text-sm sm:text-lg py-3 sm:py-4"
                                   size="lg"
                                 >
                                   ✓ Ja (+{currentQuestion.difficulty} Punkt{currentQuestion.difficulty > 1 ? 'e' : ''})
                                 </Button>
                                 <Button 
                                   onClick={() => handleNextQuestion(false)}
-                                  className="flex-1 gap-2 bg-red-500 hover:bg-red-600 text-white font-bold text-lg py-4"
+                                  className="flex-1 gap-1 sm:gap-2 bg-red-500 hover:bg-red-600 text-white font-bold text-sm sm:text-lg py-3 sm:py-4"
                                   size="lg"
                                 >
                                   ✗ Nein
@@ -584,10 +590,10 @@ function App() {
                           )}
 
                           {soloMode && (
-                            <div className="flex gap-4">
+                            <div className="flex gap-2 sm:gap-4">
                               <Button 
                                 onClick={() => handleNextQuestion()}
-                                className="w-full gap-2 bg-white/90 hover:bg-white text-foreground font-bold text-lg py-6"
+                                className="w-full gap-1 sm:gap-2 bg-white/90 hover:bg-white text-foreground font-bold text-sm sm:text-lg py-4 sm:py-6"
                                 size="lg"
                               >
                                 Nächste Frage
@@ -602,22 +608,22 @@ function App() {
                 )}
               </AnimatePresence>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full mt-12">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 w-full mt-8 sm:mt-12">
                 {CATEGORIES.map((cat) => {
                   const categoryQuestions = questionsByCategory[cat.color] || []
                   return (
                     <Card 
                       key={cat.color}
-                      className="p-4 text-center rounded-3xl"
+                      className="p-2 sm:p-4 text-center rounded-2xl sm:rounded-3xl"
                       style={{ 
                         backgroundColor: cat.colorValue,
                         color: cat.textColor,
                         borderColor: cat.colorValue
                       }}
                     >
-                      <div className="text-3xl mb-2">{cat.icon}</div>
-                      <div className="font-bold text-sm mb-1">{cat.name}</div>
-                      <div className="text-xs opacity-80">
+                      <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{cat.icon}</div>
+                      <div className="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">{cat.name}</div>
+                      <div className="text-[10px] sm:text-xs opacity-80">
                         {categoryQuestions.length} übrig
                       </div>
                     </Card>

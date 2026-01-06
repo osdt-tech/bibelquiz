@@ -115,5 +115,13 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+  }
+  
+  /* Prevent layout shifts and overflow on mobile */
+  #root {
+    width: 100%;
+    overflow-x: hidden;
   }
 }

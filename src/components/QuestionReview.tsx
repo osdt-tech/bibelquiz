@@ -54,28 +54,28 @@ export function QuestionReview({ onClose }: QuestionReviewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col p-4 pt-8">
+    <div className="min-h-screen bg-background flex flex-col p-2 sm:p-4 pt-4 sm:pt-8">
       <div className="w-full max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Fragen-Prüfmodus</h1>
-          <Button variant="outline" onClick={onClose} className="gap-2">
-            <X className="w-4 h-4" />
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h1 className="text-lg sm:text-2xl font-bold">Fragen-Prüfmodus</h1>
+          <Button variant="outline" onClick={onClose} className="gap-1 sm:gap-2 text-xs sm:text-sm" size="sm">
+            <X className="w-3 h-3 sm:w-4 sm:h-4" />
             Schließen
           </Button>
         </div>
 
         {/* Filter */}
-        <Card className="p-4 mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <FunnelSimple className="w-5 h-5" />
-            <span className="font-semibold">Filter</span>
+        <Card className="p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="flex items-center gap-2 mb-2 sm:mb-3">
+            <FunnelSimple className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="font-semibold text-sm sm:text-base">Filter</span>
           </div>
           
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3 sm:gap-4">
             <div>
-              <label className="text-sm text-muted-foreground mb-2 block">Kategorie</label>
-              <div className="flex flex-wrap gap-2">
+              <label className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2 block">Kategorie</label>
+              <div className="flex flex-wrap gap-1 sm:gap-2">
                 <Button
                   size="sm"
                   variant={filterCategory === 'all' ? 'default' : 'outline'}
@@ -102,8 +102,8 @@ export function QuestionReview({ onClose }: QuestionReviewProps) {
             </div>
 
             <div>
-              <label className="text-sm text-muted-foreground mb-2 block">Schwierigkeit</label>
-              <div className="flex gap-2">
+              <label className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2 block">Schwierigkeit</label>
+              <div className="flex gap-1 sm:gap-2">
                 <Button
                   size="sm"
                   variant={filterDifficulty === 'all' ? 'default' : 'outline'}
@@ -127,41 +127,41 @@ export function QuestionReview({ onClose }: QuestionReviewProps) {
         </Card>
 
         {/* Progress */}
-        <div className="text-center mb-4 text-muted-foreground">
+        <div className="text-center mb-3 sm:mb-4 text-sm sm:text-base text-muted-foreground">
           Frage {currentIndex + 1} von {filteredQuestions.length}
-          <span className="ml-2 text-xs">
+          <span className="ml-2 text-[10px] sm:text-xs">
             (ID: {currentQuestion.id})
           </span>
         </div>
 
         {/* Question Card */}
         <Card 
-          className="p-8 mb-6"
+          className="p-4 sm:p-8 mb-4 sm:mb-6"
           style={{ 
             backgroundColor: category.colorValue,
             color: category.textColor,
             border: `3px solid ${category.colorValue}`
           }}
         >
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="text-3xl">{category.icon}</div>
-              <h3 className="font-bold text-xl">{category.name}</h3>
+          <div className="flex items-start justify-between mb-4 sm:mb-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="text-xl sm:text-3xl">{category.icon}</div>
+              <h3 className="font-bold text-base sm:text-xl">{category.name}</h3>
             </div>
-            <div className="text-5xl font-bold">{currentQuestion.difficulty}</div>
+            <div className="text-3xl sm:text-5xl font-bold">{currentQuestion.difficulty}</div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h4 className="text-sm font-semibold opacity-70 mb-2">FRAGE:</h4>
-              <h2 className="text-xl font-semibold leading-relaxed">
+              <h4 className="text-xs sm:text-sm font-semibold opacity-70 mb-1 sm:mb-2">FRAGE:</h4>
+              <h2 className="text-base sm:text-xl font-semibold leading-relaxed">
                 {currentQuestion.question}
               </h2>
             </div>
 
-            <div className="pt-4 border-t border-current/20">
-              <h4 className="text-sm font-semibold opacity-70 mb-2">ANTWORT:</h4>
-              <p className="text-lg leading-relaxed">
+            <div className="pt-3 sm:pt-4 border-t border-current/20">
+              <h4 className="text-xs sm:text-sm font-semibold opacity-70 mb-1 sm:mb-2">ANTWORT:</h4>
+              <p className="text-sm sm:text-lg leading-relaxed">
                 {currentQuestion.answer}
               </p>
             </div>
@@ -169,18 +169,20 @@ export function QuestionReview({ onClose }: QuestionReviewProps) {
         </Card>
 
         {/* Navigation */}
-        <div className="flex justify-between gap-4">
+        <div className="flex justify-between gap-2 sm:gap-4">
           <Button
             variant="outline"
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="gap-2"
+            className="gap-1 sm:gap-2 text-xs sm:text-sm"
+            size="sm"
           >
-            <ArrowLeft className="w-5 h-5" />
-            Vorherige
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline">Vorherige</span>
+            <span className="sm:hidden">Zurück</span>
           </Button>
           
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2">
             <input
               type="number"
               min={1}
@@ -192,7 +194,7 @@ export function QuestionReview({ onClose }: QuestionReviewProps) {
                   setCurrentIndex(val)
                 }
               }}
-              className="w-20 text-center border rounded-md px-2 py-1"
+              className="w-16 sm:w-20 text-center border rounded-md px-1 sm:px-2 py-1 text-sm"
             />
           </div>
 
@@ -200,17 +202,19 @@ export function QuestionReview({ onClose }: QuestionReviewProps) {
             variant="outline"
             onClick={handleNext}
             disabled={currentIndex === filteredQuestions.length - 1}
-            className="gap-2"
+            className="gap-1 sm:gap-2 text-xs sm:text-sm"
+            size="sm"
           >
-            Nächste
-            <ArrowRight className="w-5 h-5" />
+            <span className="hidden sm:inline">Nächste</span>
+            <span className="sm:hidden">Weiter</span>
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
 
         {/* Stats */}
-        <Card className="p-4 mt-6">
-          <h3 className="font-semibold mb-3">Statistik</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <Card className="p-3 sm:p-4 mt-4 sm:mt-6">
+          <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">Statistik</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 text-xs sm:text-sm">
             <div>
               <span className="text-muted-foreground">Gesamt:</span>
               <span className="ml-2 font-bold">{QUESTIONS.length}</span>
