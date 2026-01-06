@@ -294,7 +294,7 @@ function App() {
                               </p>
                               {showPlayerSetup && (
                                 <Button onClick={startSolo} size="lg" className="w-full">
-                                  Solo starten
+                                  Spiel starten
                                 </Button>
                               )}
                             </div>
@@ -368,7 +368,7 @@ function App() {
                                   <Cube className="w-5 h-5" />
                                   {players.length < 2 
                                     ? 'Mindestens 2 Spieler benötigt'
-                                    : 'Mehrspieler starten'
+                                    : 'Spiel starten'
                                   }
                                 </Button>
                               )}
