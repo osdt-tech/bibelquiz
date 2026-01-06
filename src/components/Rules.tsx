@@ -229,6 +229,7 @@ export function Rules({ onClose }: RulesProps) {
             <p>© Copyright by Verlag der Liebenzeller Mission, Bad Liebenzell</p>
             <p className="mt-1">Idee: Karl Albus</p>
             <p>Kartentexte: Karl und Wiltrud Albus und Hans-Albert Schneider</p>
+            <p className="mt-3 font-medium">Digitale Version Idee & Umsetzung: Otto Schmidt</p>
           </motion.div>
 
           <div className="flex justify-center pb-8">
