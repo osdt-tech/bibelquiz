@@ -3,9 +3,11 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://vitejs.dev/config/
 export default ({ mode }: ConfigEnv) => {
-    process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+    const env = loadEnv(mode, process.cwd(), '');
+    process.env = { ...process.env, ...env };
+    const base = env.VITE_BASE || '/';
     return defineConfig({
-        base: '/bibelquiz/',
+        base,
         resolve: {
             alias: {
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
