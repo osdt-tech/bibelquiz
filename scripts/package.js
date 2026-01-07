@@ -47,8 +47,8 @@ if (!fs.existsSync(distDir)) {
 }
 
 try {
-    // Create ZIP archive using system zip command
-    const zipCommand = `cd "${rootDir}" && zip -r "${archivePath}" dist/ -x "*.map" "*.DS_Store"`;
+    // Create ZIP archive using system zip command (package dist contents at root)
+    const zipCommand = `cd "${distDir}" && zip -r "${archivePath}" . -x "*.map" "*.DS_Store"`;
     execSync(zipCommand, { stdio: 'inherit' });
     
     console.log('✅ Package created successfully!');
