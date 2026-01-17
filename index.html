@@ -98,7 +98,7 @@
         <div class="url">bbgbo.church.tools/ccm/bibelquiz</div>
         
         <div class="button-group">
-            <button class="confirm-btn" type="button" onclick="return goToQuiz();">
+            <button class="confirm-btn" type="button" onclick="window.location.href='https://bbgbo.church.tools/ccm/bibelquiz';">
                 ➜ Weiterleitung bestätigen
             </button>
             <button class="cancel-btn" type="button" onclick="return false;">
@@ -108,14 +108,6 @@
     </div>
 
     <script>
-        function goToQuiz() {
-            if (confirm('Du wirst jetzt zum Bibelquiz weitergeleitet.\n\nFortfahren?')) {
-                window.location.href = 'https://bbgbo.church.tools/ccm/bibelquiz';
-                return false;
-            }
-            return false;
-        }
-        
         // Sicherstellen, dass keine automatische Weiterleitung stattfindet
         window.addEventListener('beforeunload', function(e) {
             // Nur bei absichtlichen Navigationen
